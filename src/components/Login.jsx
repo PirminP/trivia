@@ -88,6 +88,11 @@ class Login extends React.Component {
               PLAY
             </button>
           </Link>
+          <Link to="/settings">
+            <button type="button" data-testid="btn-settings">
+              Settings
+            </button>
+          </Link>
         </div>
       </div>
     );
@@ -95,10 +100,12 @@ class Login extends React.Component {
 }
 
 const mapDispatchToProps = (dispatch) => ({
-  getToken: (state) => dispatch(fetchAction(state)) });
+  getToken: (state) => dispatch(fetchAction(state)),
+});
 
 const mapStateToProps = (state) => ({
-  token: state.login.data.token });
+  token: state.login.data.token,
+});
 
 Login.propTypes = {
   getToken: propTypes.func.isRequired,

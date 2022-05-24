@@ -1,12 +1,12 @@
 import React from 'react';
+import Header from './Header';
 
 class Game extends React.Component {
   render() {
     return (
       <div>
-        <button type="button" data-testid="btn-settings">
-          Settings
-        </button>
+        <Header />
+        <h1>Game</h1>
       </div>
     );
   }

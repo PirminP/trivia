@@ -1,10 +1,10 @@
 import React from 'react';
 
-class Settings extends React.Components {
+class Settings extends React.Component {
   render() {
     return (
       <div>
-        <h1>Settings</h1>
+        <h1 data-testid="settings-title">Settings</h1>
       </div>
     );
   }
