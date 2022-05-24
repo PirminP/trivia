@@ -12,6 +12,8 @@ function login(state = INITIAL_STATE, action) {
     return { ...state, data: action.payload, isFetching: false };
   case 'FAILED_ACTION':
     return { ...state, error: action.payload, isFetching: false };
+  case 'ACTION_LOGIN':
+    return { ...state, inputLogin: action.payload };
   default:
     return state;
   }

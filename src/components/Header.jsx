@@ -2,13 +2,21 @@ import React from 'react';
 import { connect } from 'react-redux';
 import md5 from 'crypto-js/md5';
 
+import propTypes from 'prop-types';
+
 class Header extends React.Component {
   render() {
-    console.log(md5('higino.neto@gmail.com').toString());
+    const { avatar } = this.props;
+    const { email, login } = avatar;
+    const hash = md5(email).toString();
     return (
       <header>
-        <img alt="#" data-testid="header-profile-picture" />
-        <h3 data-testid="header-player-name">Higino</h3>
+        <img
+          alt="#"
+          src={ `https://www.gravatar.com/avatar/${hash}` }
+          data-testid="header-profile-picture"
+        />
+        <h3 data-testid="header-player-name">{login}</h3>
         <h4 data-testid="header-score">0</h4>
       </header>
     );
@@ -16,6 +24,11 @@ class Header extends React.Component {
 }
 
 const mapStateToProps = (state) => ({
-  login: state });
+  avatar: state.login.inputLogin,
+});
+
+Header.propTypes = {
+  avatar: propTypes.objectOf.isRequired,
+};
 
 export default connect(mapStateToProps)(Header);

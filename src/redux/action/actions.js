@@ -27,14 +27,4 @@ export const actionData = (json) => ({
   payload: json,
 });
 
-export function fetchGravatar(hash) {
-  return (dispatch) => {
-    dispatch(actionRequest());
-    return fetch(`https://www.gravatar.com/avatar/${hash}`)
-      .then((response) => response.json())
-      .then((data) => {
-        dispatch(actionJson(data));
-      })
-      .catch((error) => dispatch(actionFailed(error)));
-  };
-}
+export const actionLogin = (state) => ({ type: 'ACTION_LOGIN', payload: state });
