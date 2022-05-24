@@ -1,5 +1,8 @@
 import React from 'react';
+import { connect } from 'react-redux';
 import { Link } from 'react-router-dom';
+import propTypes from 'prop-types';
+import { fetchAction } from '../redux/action/actions';
 
 class Login extends React.Component {
   constructor() {
@@ -9,6 +12,11 @@ class Login extends React.Component {
       login: '',
       button: true,
     };
+  }
+
+  componentDidMount() {
+    const { getToken } = this.props;
+    getToken();
   }
 
   handleChange = ({ target }) => {
@@ -34,8 +42,19 @@ class Login extends React.Component {
     }
   }
 
+  async saveTheToken() {
+    const { token } = this.props;
+
+    const myToken = await token;
+
+    localStorage.setItem('token', myToken);
+  }
+
   render() {
     const { button, email, login } = this.state;
+    const { token } = this.props;
+    console.log(token);
+    this.saveTheToken();
     return (
       <div>
         <div>
@@ -58,12 +77,13 @@ class Login extends React.Component {
               onChange={ this.handleChange }
             />
           </form>
-          <Link to="/ss" style={ { width: '50%', marginTop: '10px' } }>
+          <Link to="/game" style={ { width: '50%', marginTop: '10px' } }>
             <button
               id="button"
               disabled={ button }
               data-testid="btn-play"
               type="button"
+              onClick={ () => this.saveTheToken }
             >
               PLAY
             </button>
@@ -74,4 +94,15 @@ class Login extends React.Component {
   }
 }
 
-export default Login;
+const mapDispatchToProps = (dispatch) => ({
+  getToken: (state) => dispatch(fetchAction(state)) });
+
+const mapStateToProps = (state) => ({
+  token: state.login.data.token });
+
+Login.propTypes = {
+  getToken: propTypes.func.isRequired,
+  token: propTypes.string.isRequired,
+};
+
+export default connect(mapStateToProps, mapDispatchToProps)(Login);
