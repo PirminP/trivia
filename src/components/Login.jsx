@@ -27,7 +27,7 @@ class Login extends React.Component {
     const regex = /^[a-zA-Z0-9_!#$%&’*+/=?`{|}~^.-]+@[a-zA-Z0-9.-]+[a-zA-Z]$/;
     const ZERO = 0;
 
-    if (regex.test(email) && login.length > ZERO ) {
+    if (regex.test(email) && login.length > ZERO) {
       this.setState({ button: false });
     } else {
       this.setState({ button: true });
