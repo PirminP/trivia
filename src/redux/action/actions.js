@@ -28,3 +28,15 @@ export const actionData = (json) => ({
 });
 
 export const actionLogin = (state) => ({ type: 'ACTION_LOGIN', payload: state });
+
+export function fetchQuestion(token) {
+  return (dispatch) => {
+    dispatch(actionRequest());
+    return fetch(`https://opentdb.com/api.php?amount=5&token=${token}`)
+      .then((response) => response.json())
+      .then((data) => {
+        dispatch(actionJson(data));
+      })
+      .catch((error) => dispatch(actionFailed(error)));
+  };
+}

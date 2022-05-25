@@ -2,7 +2,7 @@ import React from 'react';
 import { connect } from 'react-redux';
 import { Link } from 'react-router-dom';
 import propTypes from 'prop-types';
-import { fetchAction, actionLogin } from '../redux/action/actions';
+import { fetchAction, actionLogin, fetchQuestion } from '../redux/action/actions';
 
 class Login extends React.Component {
   constructor() {
@@ -11,6 +11,7 @@ class Login extends React.Component {
       email: '',
       login: '',
       button: true,
+      token: '',
     };
   }
 
@@ -28,6 +29,7 @@ class Login extends React.Component {
     });
 
     this.disabledBtn();
+    this.saveTheToken();
   };
 
   disabledBtn() {
@@ -44,19 +46,24 @@ class Login extends React.Component {
 
   async saveTheToken() {
     const { token, getState } = this.props;
+    const { login, email } = this.state;
 
     const myToken = await token;
+    const myLogin = login;
+    const myEmail = email;
 
-    getState(this.state);
+    getState({
+      ...this.state,
+      token: myToken,
+    });
 
     localStorage.setItem('token', myToken);
+    localStorage.setItem('login', myLogin);
+    localStorage.setItem('email', myEmail);
   }
 
   render() {
     const { button, email, login } = this.state;
-    const { token } = this.props;
-    console.log(token);
-    this.saveTheToken();
     return (
       <div>
         <div>
@@ -85,7 +92,7 @@ class Login extends React.Component {
               disabled={ button }
               data-testid="btn-play"
               type="button"
-              onClick={ () => this.saveTheToken }
+              onClick={ this.saveTheToken }
             >
               PLAY
             </button>
@@ -104,10 +111,12 @@ class Login extends React.Component {
 const mapDispatchToProps = (dispatch) => ({
   getToken: (state) => dispatch(fetchAction(state)),
   getState: (state) => dispatch(actionLogin(state)),
+  getQuestion: (state) => dispatch(fetchQuestion(state)),
 });
 
 const mapStateToProps = (state) => ({
   token: state.login.data.token,
+  info: state.login.inputLogin,
 });
 
 Login.propTypes = {
