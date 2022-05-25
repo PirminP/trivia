@@ -37,6 +37,6 @@ export function fetchQuestion(token) {
       .then((data) => {
         dispatch(actionJson(data));
       })
-      .catch((error) => dispatch(actionFailed(error)));
+      .catch((error) => console.log(error));
   };
 }
