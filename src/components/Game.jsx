@@ -46,15 +46,15 @@ class Game extends React.Component {
   };
 
   showCorrectAnswers = () => {
-    const correctButtons = document.querySelectorAll('[data-testid="correct-answer"]');
-    const wrongButtons = document.querySelectorAll('[data-testid^="wrong-answer"]');
-    correctButtons.forEach((button) => {
-      button.style.backgroundColor = 'rgb(6, 240, 15)';
+    const btnCorrect = document.querySelectorAll('[data-testid="correct-answer"]');
+    const btnWrong = document.querySelectorAll('[data-testid^="wrong-answer"]');
+    btnCorrect.forEach((button) => {
       button.style.border = '3px solid rgb(6, 240, 15)';
+      button.style.backgroundColor = 'rgb(6, 240, 15)';
     });
-    wrongButtons.forEach((button) => {
-      button.style.backgroundColor = 'red';
+    btnWrong.forEach((button) => {
       button.style.border = '3px solid red';
+      button.style.backgroundColor = 'red';
     });
   }
 
