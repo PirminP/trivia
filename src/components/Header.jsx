@@ -28,7 +28,7 @@ const mapStateToProps = (state) => ({
 });
 
 Header.propTypes = {
-  avatar: propTypes.objectOf.isRequired,
+  avatar: propTypes.arrayOf.isRequired,
 };
 
 export default connect(mapStateToProps)(Header);

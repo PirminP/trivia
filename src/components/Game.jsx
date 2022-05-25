@@ -4,18 +4,20 @@ import React from 'react';
 import { connect } from 'react-redux';
 import propTypes from 'prop-types';
 import Header from './Header';
-import { fetchQuestion } from '../redux/action/actions';
+import './StyleGame.css';
 
 class Game extends React.Component {
   constructor() {
     super();
     this.state = {
-      questions: undefined,
+      questions: '',
     };
   }
 
   async componentDidMount() {
-    const { token, history } = this.props;
+    const { history } = this.props;
+
+    const token = localStorage.getItem('token');
 
     const questions = await fetch(
       `https://opentdb.com/api.php?amount=5&token=${token}`,
@@ -43,6 +45,19 @@ class Game extends React.Component {
     return a;
   };
 
+  showCorrectAnswers = () => {
+    const correctButtons = document.querySelectorAll('[data-testid="correct-answer"]');
+    const wrongButtons = document.querySelectorAll('[data-testid^="wrong-answer"]');
+    correctButtons.forEach((button) => {
+      button.style.backgroundColor = 'rgb(6, 240, 15)';
+      button.style.border = '3px solid rgb(6, 240, 15)';
+    });
+    wrongButtons.forEach((button) => {
+      button.style.backgroundColor = 'red';
+      button.style.border = '3px solid red';
+    });
+  }
+
   render() {
     const { questions } = this.state;
     let allQuestins;
@@ -57,12 +72,11 @@ class Game extends React.Component {
     return questions ? (
       <div>
         <Header />
-        <h1 data-testid="question-category">{questions[0].category}</h1>
-        <span data-testid="question-text">{questions[0].question}</span>
-        {console.log(questions)}
 
         <div data-testid="answer-options">
-          {allQuestins.sort().map((item, index) => (
+          <h1 data-testid="question-category">{questions[0].category}</h1>
+          <span data-testid="question-text">{questions[0].question}</span>
+          {allQuestins.map((item, index) => (
             <button
               type="button"
               key={ index }
@@ -71,6 +85,7 @@ class Game extends React.Component {
                   ? 'correct-answer'
                   : `wrong-answer-${index}`
               }
+              onClick={ this.showCorrectAnswers }
             >
               {item}
             </button>
@@ -86,16 +101,10 @@ class Game extends React.Component {
 const mapStateToProps = (state) => ({
   data: state,
   token: state.login.inputLogin.token,
-  dataQuestion: state.questions.dataAPI.results,
 });
 
 Game.propTypes = {
-  history: propTypes.objectOf.isRequired,
-  token: propTypes.string.isRequired,
+  history: propTypes.shape(propTypes.object).isRequired,
 };
 
-const mapDispatchToProps = (dispatch) => ({
-  getQuestions: (state) => dispatch(fetchQuestion(state)),
-});
-
-export default connect(mapStateToProps, mapDispatchToProps)(Game);
+export default connect(mapStateToProps, null)(Game);

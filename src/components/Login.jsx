@@ -2,7 +2,11 @@ import React from 'react';
 import { connect } from 'react-redux';
 import { Link } from 'react-router-dom';
 import propTypes from 'prop-types';
-import { fetchAction, actionLogin, fetchQuestion } from '../redux/action/actions';
+import {
+  fetchAction,
+  actionLogin,
+  fetchQuestion,
+} from '../redux/action/actions';
 
 class Login extends React.Component {
   constructor() {
@@ -15,11 +19,6 @@ class Login extends React.Component {
     };
   }
 
-  componentDidMount() {
-    const { getToken } = this.props;
-    getToken();
-  }
-
   handleChange = ({ target }) => {
     const { name } = target;
     const value = target.type === 'checkbox' ? target.checked : target.value;
@@ -29,10 +28,9 @@ class Login extends React.Component {
     });
 
     this.disabledBtn();
-    this.saveTheToken();
   };
 
-  disabledBtn() {
+  disabledBtn = () => {
     const { email, login } = this.state;
     const regex = /^[a-zA-Z0-9_!#$%&’*+/=?`{|}~^.-]+@[a-zA-Z0-9.-]+[a-zA-Z]$/;
     const ZERO = 0;
@@ -44,11 +42,17 @@ class Login extends React.Component {
     }
   }
 
-  async saveTheToken() {
-    const { token, getState } = this.props;
+  saveTheToken = async () => {
+    console.log(this.props);
+    const { history, getState } = this.props;
     const { login, email } = this.state;
 
-    const myToken = await token;
+    const response = await fetch(
+      'https://opentdb.com/api_token.php?command=request',
+    );
+    const token = await response.json();
+
+    const myToken = token.token;
     const myLogin = login;
     const myEmail = email;
 
@@ -60,7 +64,9 @@ class Login extends React.Component {
     localStorage.setItem('token', myToken);
     localStorage.setItem('login', myLogin);
     localStorage.setItem('email', myEmail);
-  }
+
+    history.push('/game');
+  };
 
   render() {
     const { button, email, login } = this.state;
@@ -86,17 +92,15 @@ class Login extends React.Component {
               onChange={ this.handleChange }
             />
           </form>
-          <Link to="/game" style={ { width: '50%', marginTop: '10px' } }>
-            <button
-              id="button"
-              disabled={ button }
-              data-testid="btn-play"
-              type="button"
-              onClick={ this.saveTheToken }
-            >
-              PLAY
-            </button>
-          </Link>
+          <button
+            id="button"
+            disabled={ button }
+            data-testid="btn-play"
+            type="button"
+            onClick={ this.saveTheToken }
+          >
+            PLAY
+          </button>
           <Link to="/settings">
             <button type="button" data-testid="btn-settings">
               Settings
@@ -120,9 +124,8 @@ const mapStateToProps = (state) => ({
 });
 
 Login.propTypes = {
-  getToken: propTypes.func.isRequired,
-  token: propTypes.string.isRequired,
   getState: propTypes.func.isRequired,
+  history: propTypes.objectOf.isRequired,
 };
 
 export default connect(mapStateToProps, mapDispatchToProps)(Login);
