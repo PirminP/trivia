@@ -125,7 +125,7 @@ const mapStateToProps = (state) => ({
 
 Login.propTypes = {
   getState: propTypes.func.isRequired,
-  history: propTypes.objectOf.isRequired,
+  history: propTypes.shape(propTypes.object).isRequired,
 };
 
 export default connect(mapStateToProps, mapDispatchToProps)(Login);
