@@ -4,7 +4,7 @@ import React from 'react';
 import { connect } from 'react-redux';
 import propTypes from 'prop-types';
 import Header from './Header';
-import './StyleGame.css';
+import { actionPlayer } from '../redux/action/actions';
 
 class Game extends React.Component {
   constructor() {
@@ -12,6 +12,8 @@ class Game extends React.Component {
     this.state = {
       questions: '',
       timer: 30,
+      assertions: 0,
+      score: 0,
     };
   }
 
@@ -85,7 +87,7 @@ class Game extends React.Component {
     });
   };
 
-  showCorrectAnswers = () => {
+  showCorrectAnswers = ({ target }) => {
     const btnCorrect = document.querySelectorAll(
       '[data-testid="correct-answer"]',
     );
@@ -98,6 +100,8 @@ class Game extends React.Component {
       button.style.border = '3px solid red';
       button.style.backgroundColor = 'red';
     });
+
+    this.totalPoints(target.className);
   };
 
   questionDifficult = () => {
@@ -122,18 +126,33 @@ class Game extends React.Component {
     }
   };
 
-  totalPoints = () => {
-    const { timer } = this.state;
+  totalPoints = (answer) => {
+    if (answer === 'wrong-answer') return 0;
+    const { avatar, getPlayer } = this.props;
+    const { email, login } = avatar;
+    const { timer, assertions, score } = this.state;
     const START_POINT = 10;
-
     const dificuldade = this.questionDifficult();
-    const pontuacao = START_POINT + (timer + dificuldade);
 
-    return pontuacao;
-  }
+    const pontuacao = START_POINT + timer * dificuldade;
+
+    this.setState((prevState) => ({
+      score: prevState.score + pontuacao,
+      assertions: prevState.assertions + 1,
+    }));
+
+    const player = {
+      name: login,
+      gravatarEmail: email,
+      score: score + pontuacao,
+      assertions: assertions + 1,
+    };
+
+    getPlayer(player);
+  };
 
   render() {
-    const { questions, timer } = this.state;
+    const { questions, timer, score } = this.state;
     let allQuestins;
 
     if (questions) {
@@ -141,15 +160,14 @@ class Game extends React.Component {
         ...questions[0].incorrect_answers,
         questions[0].correct_answer,
       ];
-
-      console.log(this.totalPoints());
     }
 
     return questions ? (
       <div>
-        <Header timer={ timer } />
+        <Header score={ score } />
 
         <div data-testid="answer-options">
+          <h2>{ timer }</h2>
           <h1 data-testid="question-category">{questions[0].category}</h1>
           <span data-testid="question-text">{questions[0].question}</span>
           {allQuestins.map((item, index) => (
@@ -160,6 +178,11 @@ class Game extends React.Component {
                 item === questions[0].correct_answer
                   ? 'correct-answer'
                   : `wrong-answer-${index}`
+              }
+              className={
+                item === questions[0].correct_answer
+                  ? 'correct-answer'
+                  : 'wrong-answer'
               }
               onClick={ this.showCorrectAnswers }
               disabled={ timer === 0 }
@@ -176,12 +199,21 @@ class Game extends React.Component {
 }
 
 const mapStateToProps = (state) => ({
-  data: state,
+  avatar: state.login.inputLogin,
   token: state.login.inputLogin.token,
+  player: state,
+});
+
+const mapDispatchToProps = (dispatch) => ({
+  getPlayer: (state) => dispatch(actionPlayer(state)),
 });
 
 Game.propTypes = {
   history: propTypes.shape(propTypes.object).isRequired,
+  getPlayer: propTypes.func.isRequired,
+  email: propTypes.string.isRequired,
+  login: propTypes.string.isRequired,
+  avatar: propTypes.shape(propTypes.object).isRequired,
 };
 
-export default connect(mapStateToProps, null)(Game);
+export default connect(mapStateToProps, mapDispatchToProps)(Game);

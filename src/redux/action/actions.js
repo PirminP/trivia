@@ -40,3 +40,5 @@ export function fetchQuestion(token) {
       .catch((error) => console.log(error));
   };
 }
+
+export const actionPlayer = (state) => ({ type: 'ACTION_PLAYER', state });
