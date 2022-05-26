@@ -11,6 +11,7 @@ class Game extends React.Component {
     super();
     this.state = {
       questions: '',
+      timer: 30,
     };
   }
 
@@ -28,7 +29,19 @@ class Game extends React.Component {
     if (questions2.response_code === NUMBER_RESPONSE_CODE) {
       history.push('/');
     } else {
-      this.setState({ questions: this.shuffle(questions2.results) });
+      this.setState({
+        questions: this.shuffle(questions2.results),
+      });
+    }
+
+    this.startCounter();
+  }
+
+  componentDidUpdate() {
+    const { timer } = this.state;
+    if (timer < 0) {
+      clearInterval(this.interval);
+      this.stopCounter();
     }
   }
 
@@ -45,8 +58,37 @@ class Game extends React.Component {
     return a;
   };
 
+  startCounter = () => {
+    const UM_SEGUNDO = 1000;
+    const { timer } = this.state;
+
+    this.interval = setInterval(() => {
+      if (timer === 0) this.setState({ timer: 0 });
+      this.setState((prevState) => ({
+        timer: prevState.timer - 1,
+      }));
+    }, UM_SEGUNDO);
+  };
+
+  stopCounter = () => {
+    this.setState(
+      {
+        timer: 0,
+      },
+      () => clearInterval(this.interval),
+    );
+  };
+
+  resetCounter = () => {
+    this.setState({
+      timer: 30,
+    });
+  };
+
   showCorrectAnswers = () => {
-    const btnCorrect = document.querySelectorAll('[data-testid="correct-answer"]');
+    const btnCorrect = document.querySelectorAll(
+      '[data-testid="correct-answer"]',
+    );
     const btnWrong = document.querySelectorAll('[data-testid^="wrong-answer"]');
     btnCorrect.forEach((button) => {
       button.style.border = '3px solid rgb(6, 240, 15)';
@@ -56,10 +98,42 @@ class Game extends React.Component {
       button.style.border = '3px solid red';
       button.style.backgroundColor = 'red';
     });
+  };
+
+  questionDifficult = () => {
+    const { questions } = this.state;
+    const { difficulty } = questions[0];
+    const EASY = 1;
+    const MEDIUM = 2;
+    const HARD = 3;
+    let dificuldade;
+
+    if (difficulty === 'easy') {
+      dificuldade = EASY;
+      return dificuldade;
+    }
+    if (difficulty === 'medium') {
+      dificuldade = MEDIUM;
+      return dificuldade;
+    }
+    if (difficulty === 'hard') {
+      dificuldade = HARD;
+      return dificuldade;
+    }
+  };
+
+  totalPoints = () => {
+    const { timer } = this.state;
+    const START_POINT = 10;
+
+    const dificuldade = this.questionDifficult();
+    const pontuacao = START_POINT + (timer + dificuldade);
+
+    return pontuacao;
   }
 
   render() {
-    const { questions } = this.state;
+    const { questions, timer } = this.state;
     let allQuestins;
 
     if (questions) {
@@ -67,11 +141,13 @@ class Game extends React.Component {
         ...questions[0].incorrect_answers,
         questions[0].correct_answer,
       ];
+
+      console.log(this.totalPoints());
     }
 
     return questions ? (
       <div>
-        <Header />
+        <Header timer={ timer } />
 
         <div data-testid="answer-options">
           <h1 data-testid="question-category">{questions[0].category}</h1>
@@ -86,6 +162,7 @@ class Game extends React.Component {
                   : `wrong-answer-${index}`
               }
               onClick={ this.showCorrectAnswers }
+              disabled={ timer === 0 }
             >
               {item}
             </button>

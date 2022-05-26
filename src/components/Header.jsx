@@ -6,7 +6,7 @@ import propTypes from 'prop-types';
 
 class Header extends React.Component {
   render() {
-    const { avatar } = this.props;
+    const { avatar, timer } = this.props;
     const { email, login } = avatar;
     const hash = md5(email).toString();
     return (
@@ -17,7 +17,7 @@ class Header extends React.Component {
           data-testid="header-profile-picture"
         />
         <h3 data-testid="header-player-name">{login}</h3>
-        <h4 data-testid="header-score">0</h4>
+        <h4 data-testid="header-score">{timer}</h4>
       </header>
     );
   }
@@ -29,6 +29,7 @@ const mapStateToProps = (state) => ({
 
 Header.propTypes = {
   avatar: propTypes.arrayOf.isRequired,
+  timer: propTypes.number.isRequired,
 };
 
 export default connect(mapStateToProps)(Header);

@@ -2,7 +2,7 @@ import React from "react";
 import userEvent from "@testing-library/user-event";
 import App from "../App";
 import Login from "../components/Login";
-import { screen } from "@testing-library/react";
+import { screen, waitFor } from "@testing-library/react";
 
 import { renderWithRouterAndRedux } from "./helpers/renderWithRouterAndRedux";
 
@@ -65,5 +65,23 @@ describe("1 - Crie uma página inicial de login com os seguintes campos e caract
     userEvent.type(email, INVALID_EMAIL);
     userEvent.type(login, VALID_LOGIN);
     expect(button).toBeDisabled();
+  });
+
+  test("Salve o email no estado da aplicação, com a chave email", async () => {
+    const {history } = renderWithRouterAndRedux(<Login />)
+    const email = screen.getByTestId(EMAIL_INPUT_TEST_ID);
+    const login = screen.getByTestId(PLAYER_INPUT_TEST_ID)
+    const button = screen.getByTestId(BUTTON_TEST_ID);
+
+    userEvent.type(email, VALID_EMAIL);
+    userEvent.type(login, VALID_LOGIN);
+
+    userEvent.click(button);
+
+    
+
+    await expect(history.location.pathname).toBe('/game')
+
+
   });
 });
