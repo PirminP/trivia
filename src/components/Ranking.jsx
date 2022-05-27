@@ -1,7 +1,12 @@
 import React from 'react';
 import propTypes from 'prop-types';
+import { connect } from 'react-redux';
 
 class Ranking extends React.Component {
+  // componentDidMount() {
+  //   const { player, login, email } = this.props;
+  // }
+
   render() {
     return (
       <div>
@@ -26,4 +31,10 @@ Ranking.propTypes = {
   history: propTypes.shape(propTypes.object).isRequired,
 };
 
-export default Ranking;
+const mapStateToProps = (state) => ({
+  player: state.player,
+  login: state.login.inputLogin.login,
+  email: state.login.inputLogin.email,
+});
+
+export default connect(mapStateToProps)(Ranking);

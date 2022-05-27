@@ -44,7 +44,7 @@ class Login extends React.Component {
   saveTheToken = async () => {
     console.log(this.props);
     const { history, getState } = this.props;
-    const { login, email } = this.state;
+    // const { login, email } = this.state;
 
     const response = await fetch(
       'https://opentdb.com/api_token.php?command=request',
@@ -52,8 +52,8 @@ class Login extends React.Component {
     const token = await response.json();
 
     const myToken = token.token;
-    const myLogin = login;
-    const myEmail = email;
+    // const myLogin = login;
+    // const myEmail = email;
 
     getState({
       ...this.state,
@@ -61,8 +61,8 @@ class Login extends React.Component {
     });
 
     localStorage.setItem('token', myToken);
-    localStorage.setItem('login', myLogin);
-    localStorage.setItem('email', myEmail);
+    // localStorage.setItem('login', myLogin);
+    // localStorage.setItem('email', myEmail);
 
     history.push('/game');
   };
