@@ -1,7 +1,7 @@
 import React from 'react';
 import { connect } from 'react-redux';
 import propTypes from 'prop-types';
-import Header from './Header';
+import Header from '../components/Header';
 
 class Feedback extends React.Component {
   render() {

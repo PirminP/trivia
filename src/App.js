@@ -5,7 +5,7 @@ import './App.css';
 import Login from './components/Login';
 import Game from './components/Game';
 import Settings from './components/Settings';
-import Feedback from './components/Feedback';
+import Feedback from './pages/Feedback';
 import Ranking from './components/Ranking';
 
 export default function App() {
