@@ -1,10 +1,9 @@
-// source: https://stackoverflow.com/questions/6274339/how-can-i-this.shuffle-an-array, função this.shuffle
 import React from 'react';
 import { connect } from 'react-redux';
 import propTypes from 'prop-types';
 import Header from './Header';
 import { actionPlayer } from '../redux/action/actions';
-
+import { shuffle, questionDifficult } from '../services/services';
 
 class Game extends React.Component {
   constructor() {
@@ -21,9 +20,7 @@ class Game extends React.Component {
 
   async componentDidMount() {
     const { history } = this.props;
-
     const token = localStorage.getItem('token');
-
     const questions = await fetch(
       `https://opentdb.com/api.php?amount=5&token=${token}`,
     );
@@ -34,7 +31,7 @@ class Game extends React.Component {
       history.push('/');
     } else {
       this.setState({
-        questions: this.shuffle(questions2.results),
+        questions: shuffle(questions2.results),
       });
     }
 
@@ -62,18 +59,12 @@ class Game extends React.Component {
   };
 
   stopCounter = () => {
-    this.setState(
-      {
-        timer: 0,
-      },
-      () => clearInterval(this.interval),
-    );
+    this.setState({ timer: 0 },
+      () => clearInterval(this.interval));
   };
 
   resetCounter = () => {
-    this.setState({
-      timer: 30,
-    });
+    this.setState({ timer: 30 });
   };
 
   newQuestion = async () => {
@@ -89,22 +80,9 @@ class Game extends React.Component {
       history.push('/');
     } else {
       this.setState({
-        questions:this.shuffle(questions2.results),
+        questions: shuffle(questions2.results),
       });
     }
-  };
-
-  shuffle = (a) => {
-    let j;
-    let x;
-    let i;
-    for (i = a.length - 1; i > 0; i -= 1) {
-      j = Math.floor(Math.random() * (i + 1));
-      x = a[i];
-      a[i] = a[j];
-      a[j] = x;
-    }
-    return a;
   };
 
   showCorrectAnswers = ({ target }) => {
@@ -114,46 +92,23 @@ class Game extends React.Component {
     const btnWrong = document.querySelectorAll('[data-testid^="wrong-answer"]');
     btnCorrect.forEach((button) => {
       button.style.border = '3px solid rgb(6, 240, 15)';
-      button.style.backgroundColor = 'rgb(6, 240, 15)';
     });
     btnWrong.forEach((button) => {
       button.style.border = '3px solid red';
-      button.style.backgroundColor = 'red';
     });
 
     this.totalPoints(target.className);
     this.setState({ respondido: true });
   };
 
-  questionDifficult = () => {
-    const { questions, indexQ } = this.state;
-    const { difficulty } = questions[indexQ];
-    const EASY = 1;
-    const MEDIUM = 2;
-    const HARD = 3;
-    let dificuldade;
-
-    if (difficulty === 'easy') {
-      dificuldade = EASY;
-      return dificuldade;
-    }
-    if (difficulty === 'medium') {
-      dificuldade = MEDIUM;
-      return dificuldade;
-    }
-    if (difficulty === 'hard') {
-      dificuldade = HARD;
-      return dificuldade;
-    }
-  };
-
   totalPoints = (answer) => {
     if (answer === 'wrong-answer') return 0;
     const { avatar, getPlayer } = this.props;
     const { email, login } = avatar;
-    const { timer, assertions, score } = this.state;
+    const { timer, assertions, score, questions, indexQ } = this.state;
+    const { difficulty } = questions[indexQ];
     const START_POINT = 10;
-    const dificuldade = this.questionDifficult();
+    const dificuldade = questionDifficult(difficulty);
 
     const pontuacao = START_POINT + timer * dificuldade;
 
