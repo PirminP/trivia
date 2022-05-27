@@ -14,6 +14,8 @@ class Game extends React.Component {
       timer: 30,
       assertions: 0,
       score: 0,
+      respondido: false,
+      indexQ: 0,
     };
   }
 
@@ -87,7 +89,44 @@ class Game extends React.Component {
     });
   };
 
+  /*     buttonNext = (timer) => {
+    if(timer === 0 ) {
+      const button = document.createElement('button');
+      button.setAttribute('data-tesid', 'btn-next');
+      const container = document.querySelector('.container-answer');
+      button.textContent = "Next";
+      container.appendChild(button);
+      button.setAttribute('onClick', this.newQuestion);
+    }
+
+    const button = document.createElement('button');
+    button.setAttribute('data-tesid', 'btn-next');
+    const container = document.querySelector('.container-answer');
+    button.textContent = "Next";
+    container.appendChild(button);
+    button.setAttribute('onclick', this.newQuestion);
+  } */
+
+  newQuestion = async () => {
+    const token = localStorage.getItem('token');
+    const questions = await fetch(
+      `https://opentdb.com/api.php?amount=5&token=${token}`,
+    );
+    const questions2 = await questions.json();
+    const NUMBER_RESPONSE_CODE = 3;
+
+    if (questions2.response_code === NUMBER_RESPONSE_CODE) {
+      const { history } = this.props;
+      history.push('/');
+    } else {
+      this.setState({
+        questions: this.shuffle(questions2.results),
+      });
+    }
+  };
+
   showCorrectAnswers = ({ target }) => {
+    const { timer } = this.state;
     const btnCorrect = document.querySelectorAll(
       '[data-testid="correct-answer"]',
     );
@@ -102,11 +141,12 @@ class Game extends React.Component {
     });
 
     this.totalPoints(target.className);
+    this.setState({ respondido: true });
   };
 
   questionDifficult = () => {
-    const { questions } = this.state;
-    const { difficulty } = questions[0];
+    const { questions, indexQ } = this.state;
+    const { difficulty } = questions[indexQ];
     const EASY = 1;
     const MEDIUM = 2;
     const HARD = 3;
@@ -151,14 +191,45 @@ class Game extends React.Component {
     getPlayer(player);
   };
 
+  setNextQuestion = () => {
+    const { indexQ } = this.state;
+    const NUMBER_FOUR = 4;
+    const btnCorrect = document.querySelectorAll(
+      '[data-testid="correct-answer"]',
+    );
+    const btnWrong = document.querySelectorAll('[data-testid^="wrong-answer"]');
+
+    btnCorrect.forEach((button) => {
+      button.style.border = '';
+      button.style.backgroundColor = '';
+    });
+    btnWrong.forEach((button) => {
+      button.style.border = '';
+      button.style.backgroundColor = '';
+    });
+
+    if (indexQ === NUMBER_FOUR) {
+      const { history } = this.props;
+
+      history.push('/feedback');
+    }
+
+    if (indexQ !== NUMBER_FOUR) {
+      this.setState((prevState) => ({
+        indexQ: prevState.indexQ + 1,
+        timer: 30,
+      }));
+    }
+  }
+
   render() {
-    const { questions, timer, score } = this.state;
+    const { questions, timer, score, respondido, indexQ } = this.state;
     let allQuestins;
 
     if (questions) {
       allQuestins = [
-        ...questions[0].incorrect_answers,
-        questions[0].correct_answer,
+        ...questions[indexQ].incorrect_answers,
+        questions[indexQ].correct_answer,
       ];
     }
 
@@ -166,21 +237,21 @@ class Game extends React.Component {
       <div>
         <Header score={ score } />
 
-        <div data-testid="answer-options">
-          <h2>{ timer }</h2>
-          <h1 data-testid="question-category">{questions[0].category}</h1>
-          <span data-testid="question-text">{questions[0].question}</span>
+        <div data-testid="answer-options" className="container-answer">
+          <h2>{timer}</h2>
+          <h1 data-testid="question-category">{questions[indexQ].category}</h1>
+          <span data-testid="question-text">{questions[indexQ].question}</span>
           {allQuestins.map((item, index) => (
             <button
               type="button"
               key={ index }
               data-testid={
-                item === questions[0].correct_answer
+                item === questions[indexQ].correct_answer
                   ? 'correct-answer'
                   : `wrong-answer-${index}`
               }
               className={
-                item === questions[0].correct_answer
+                item === questions[indexQ].correct_answer
                   ? 'correct-answer'
                   : 'wrong-answer'
               }
@@ -191,6 +262,25 @@ class Game extends React.Component {
             </button>
           ))}
         </div>
+        {timer === 0 ? (
+          <button
+          type='button'
+            onClick={ this.setNextQuestion }
+            data-testid="btn-next"
+          >
+            Next
+          </button>
+        ) : (
+          respondido && (
+            <button
+            type='button'
+              onClick={ this.setNextQuestion }
+              data-testid="btn-next"
+            >
+              Next
+            </button>
+          )
+        )}
       </div>
     ) : (
       <div>loading</div>
