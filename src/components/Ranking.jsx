@@ -6,6 +6,7 @@ class Ranking extends React.Component {
     return (
       <div>
         <h1 data-testid="ranking-title">Ranking</h1>
+
         <button
           type="button"
           data-testid="btn-go-home"
@@ -13,17 +14,15 @@ class Ranking extends React.Component {
             const { history } = this.props;
             history.push('/');
           } }
-        />
+        >
+          Inicio
+        </button>
       </div>
     );
   }
 }
 
-
-
-
 Ranking.propTypes = {
-  player: propTypes.shape(propTypes.object).isRequired,
   history: propTypes.shape(propTypes.object).isRequired,
 };
 

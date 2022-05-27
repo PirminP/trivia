@@ -1,7 +1,7 @@
-import React from "react";
-import { connect } from "react-redux";
-import propTypes from "prop-types";
-import Header from "./Header";
+import React from 'react';
+import { connect } from 'react-redux';
+import propTypes from 'prop-types';
+import Header from './Header';
 
 class Feedback extends React.Component {
   render() {
@@ -15,32 +15,32 @@ class Feedback extends React.Component {
         <Header />
         <h1>Pagina de Feedback</h1>
         {assertions < NUMBER_TRES ? (
-          <span data-testid='feedback-text'>Could be better...</span>
+          <span data-testid="feedback-text">Could be better...</span>
         ) : (
-          <span data-testid='feedback-text'>Well Done!</span>
+          <span data-testid="feedback-text">Well Done!</span>
         )}
         <div>
-          <h2 data-testid='feedback-total-score'>{score}</h2>
-          <h3 data-testid='feedback-total-question'>{assertions}</h3>
+          <h2 data-testid="feedback-total-score">{score}</h2>
+          <h3 data-testid="feedback-total-question">{assertions}</h3>
         </div>
         <div>
           <button
-            type='button'
-            data-testid='btn-ranking'
-            onClick={() => {
+            type="button"
+            data-testid="btn-ranking"
+            onClick={ () => {
               const { history } = this.props;
-              history.push("/ranking");
-            }}
+              history.push('/ranking');
+            } }
           >
             Ranking
           </button>
           <button
-            type='button'
-            data-testid='btn-play-again'
-            onClick={() => {
+            type="button"
+            data-testid="btn-play-again"
+            onClick={ () => {
               const { history } = this.props;
-              history.push("/");
-            }}
+              history.push('/');
+            } }
           >
             Play Again
           </button>
