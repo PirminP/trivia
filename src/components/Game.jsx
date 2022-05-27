@@ -5,6 +5,7 @@ import propTypes from 'prop-types';
 import Header from './Header';
 import { actionPlayer } from '../redux/action/actions';
 
+
 class Game extends React.Component {
   constructor() {
     super();
@@ -88,7 +89,7 @@ class Game extends React.Component {
       history.push('/');
     } else {
       this.setState({
-        questions: this.shuffle(questions2.results),
+        questions:this.shuffle(questions2.results),
       });
     }
   };
