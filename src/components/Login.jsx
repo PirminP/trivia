@@ -7,6 +7,7 @@ import {
   actionLogin,
   fetchQuestion,
 } from '../redux/action/actions';
+import md5 from 'crypto-js/md5';
 
 class Login extends React.Component {
   constructor() {
@@ -44,7 +45,7 @@ class Login extends React.Component {
   saveTheToken = async () => {
     console.log(this.props);
     const { history, getState } = this.props;
-    // const { login, email } = this.state;
+    const { login, email } = this.state;
 
     const response = await fetch(
       'https://opentdb.com/api_token.php?command=request',
@@ -61,8 +62,29 @@ class Login extends React.Component {
     });
 
     localStorage.setItem('token', myToken);
-    // localStorage.setItem('login', myLogin);
-    // localStorage.setItem('email', myEmail);
+
+    const hash = md5(email).toString();
+
+    // const playerData = {
+    //   name: login,
+    //   score: 0,
+    //   picture: `https://www.gravatar.com/avatar/${hash}`,
+    // };
+
+    const playerData = { name: login, score: 0, picture: `https://www.gravatar.com/avatar/${hash}` };
+
+    const ranking = JSON.parse(localStorage.getItem('ranking'));
+
+    if (ranking) {
+      const oldRanking = JSON.parse(localStorage.getItem('ranking'));
+      oldRanking.push(playerData);
+      localStorage.setItem('ranking', JSON.stringify(oldRanking));
+      // console.log('tem ranking');
+      console.log(oldRanking);
+    } else {
+      // console.log('não tem ranking');
+      localStorage.setItem('ranking', JSON.stringify([playerData]));
+    }
 
     history.push('/game');
   };
