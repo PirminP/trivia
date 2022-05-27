@@ -20,14 +20,13 @@ class Login extends React.Component {
   }
 
   handleChange = ({ target }) => {
+    this.disabledBtn();
     const { name } = target;
     const value = target.type === 'checkbox' ? target.checked : target.value;
 
     this.setState({
       [name]: value,
     });
-
-    this.disabledBtn();
   };
 
   disabledBtn = () => {
@@ -35,7 +34,7 @@ class Login extends React.Component {
     const regex = /^[a-zA-Z0-9_!#$%&’*+/=?`{|}~^.-]+@[a-zA-Z0-9.-]+[a-zA-Z]$/;
     const ZERO = 0;
 
-    if (regex.test(email) && login.length > ZERO) {
+    if (regex.test(email) && login.length !== ZERO) {
       this.setState({ button: false });
     } else {
       this.setState({ button: true });

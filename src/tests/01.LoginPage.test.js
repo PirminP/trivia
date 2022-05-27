@@ -2,10 +2,8 @@ import React from "react";
 import userEvent from "@testing-library/user-event";
 import App from "../App";
 import Login from "../components/Login";
-import { screen, waitFor } from "@testing-library/react";
-
-import { renderWithRouterAndRedux } from "./helpers/renderWithRouterAndRedux";
-
+import { screen } from "@testing-library/react";
+import { renderWithRouterAndRedux } from "./helpers/renderWithRouterAndRedux"
 import {
   EMAIL_INPUT_TEST_ID,
   PLAYER_INPUT_TEST_ID,
@@ -15,7 +13,7 @@ import {
   VALID_LOGIN,
   INVALID_EMAIL,
   INVALID_LOGIN,
-} from "./helpers/constants";
+} from "./helpers/constants"
 
 describe("1 - Crie uma página inicial de login com os seguintes campos e caracteristicas:", () => {
   test("A rota para esta página deve ser /", () => {
@@ -32,7 +30,7 @@ describe("1 - Crie uma página inicial de login com os seguintes campos e caract
     expect(player).toBeInTheDocument();
   });
 
-  test("Crie um botão com o texto Entrar", () => {
+  test("Crie um botão com o texto Play", () => {
     renderWithRouterAndRedux(<App />, "/");
     const button = screen.getByTestId(BUTTON_TEST_ID);
 
@@ -67,21 +65,10 @@ describe("1 - Crie uma página inicial de login com os seguintes campos e caract
     expect(button).toBeDisabled();
   });
 
-  test("Salve o email no estado da aplicação, com a chave email", async () => {
-    const {history } = renderWithRouterAndRedux(<Login />)
-    const email = screen.getByTestId(EMAIL_INPUT_TEST_ID);
-    const login = screen.getByTestId(PLAYER_INPUT_TEST_ID)
-    const button = screen.getByTestId(BUTTON_TEST_ID);
-
-    userEvent.type(email, VALID_EMAIL);
-    userEvent.type(login, VALID_LOGIN);
-
+  test('A rota deve ser mudada para /settings ao clicar no botão "Configurações"', () => {
+    const { history } = renderWithRouterAndRedux(<Login />);
+    const button = screen.getByTestId(BUTTON_SETTINGS_TEST_ID);
     userEvent.click(button);
-
-    
-
-    await expect(history.location.pathname).toBe('/game')
-
-
+    expect(history.location.pathname).toBe('/settings');
   });
-});
+})
