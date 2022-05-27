@@ -10,8 +10,6 @@ class Header extends React.Component {
     const { email, login } = avatar;
     const hash = md5(email).toString();
 
-    console.log(player.score);
-
     return (
       <header>
         <img
@@ -34,6 +32,7 @@ const mapStateToProps = (state) => ({
 Header.propTypes = {
   avatar: propTypes.arrayOf.isRequired,
   score: propTypes.number.isRequired,
+  player: propTypes.string.isRequired,
 };
 
 export default connect(mapStateToProps)(Header);
