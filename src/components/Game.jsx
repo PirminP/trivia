@@ -152,7 +152,7 @@ class Game extends React.Component {
     const { email, login } = avatar;
     const { timer, assertions, score } = this.state;
     const START_POINT = 10;
-    const dificuldade = questionDifficult();
+    const dificuldade = this.questionDifficult();
 
     const pontuacao = START_POINT + timer * dificuldade;
 
