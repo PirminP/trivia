@@ -1,5 +1,4 @@
-// source: https://stackoverflow.com/questions/6274339/how-can-i-shuffle-an-array, função shuffle
-
+// source: https://stackoverflow.com/questions/6274339/how-can-i-this.shuffle-an-array, função this.shuffle
 import React from 'react';
 import { connect } from 'react-redux';
 import propTypes from 'prop-types';
@@ -49,19 +48,6 @@ class Game extends React.Component {
     }
   }
 
-  shuffle = (a) => {
-    let j;
-    let x;
-    let i;
-    for (i = a.length - 1; i > 0; i -= 1) {
-      j = Math.floor(Math.random() * (i + 1));
-      x = a[i];
-      a[i] = a[j];
-      a[j] = x;
-    }
-    return a;
-  };
-
   startCounter = () => {
     const UM_SEGUNDO = 1000;
     const { timer } = this.state;
@@ -89,24 +75,6 @@ class Game extends React.Component {
     });
   };
 
-  /*     buttonNext = (timer) => {
-    if(timer === 0 ) {
-      const button = document.createElement('button');
-      button.setAttribute('data-tesid', 'btn-next');
-      const container = document.querySelector('.container-answer');
-      button.textContent = "Next";
-      container.appendChild(button);
-      button.setAttribute('onClick', this.newQuestion);
-    }
-
-    const button = document.createElement('button');
-    button.setAttribute('data-tesid', 'btn-next');
-    const container = document.querySelector('.container-answer');
-    button.textContent = "Next";
-    container.appendChild(button);
-    button.setAttribute('onclick', this.newQuestion);
-  } */
-
   newQuestion = async () => {
     const token = localStorage.getItem('token');
     const questions = await fetch(
@@ -125,8 +93,20 @@ class Game extends React.Component {
     }
   };
 
+  shuffle = (a) => {
+    let j;
+    let x;
+    let i;
+    for (i = a.length - 1; i > 0; i -= 1) {
+      j = Math.floor(Math.random() * (i + 1));
+      x = a[i];
+      a[i] = a[j];
+      a[j] = x;
+    }
+    return a;
+  };
+
   showCorrectAnswers = ({ target }) => {
-    const { timer } = this.state;
     const btnCorrect = document.querySelectorAll(
       '[data-testid="correct-answer"]',
     );
@@ -172,7 +152,7 @@ class Game extends React.Component {
     const { email, login } = avatar;
     const { timer, assertions, score } = this.state;
     const START_POINT = 10;
-    const dificuldade = this.questionDifficult();
+    const dificuldade = questionDifficult();
 
     const pontuacao = START_POINT + timer * dificuldade;
 
@@ -220,7 +200,7 @@ class Game extends React.Component {
         timer: 30,
       }));
     }
-  }
+  };
 
   render() {
     const { questions, timer, score, respondido, indexQ } = this.state;
@@ -264,7 +244,7 @@ class Game extends React.Component {
         </div>
         {timer === 0 ? (
           <button
-          type='button'
+            type="button"
             onClick={ this.setNextQuestion }
             data-testid="btn-next"
           >
@@ -273,7 +253,7 @@ class Game extends React.Component {
         ) : (
           respondido && (
             <button
-            type='button'
+              type="button"
               onClick={ this.setNextQuestion }
               data-testid="btn-next"
             >
