@@ -88,26 +88,11 @@ describe("Teste page Login", () => {
     console.log(history);
     history.push('/game');
 
-
-/*     const email = screen.getByTestId("input-gravatar-email");
-    const name = screen.getByTestId("input-player-name");
-    const button = screen.getByTestId(BUTTON_TEST_ID);
-
-    userEvent.type(email, "test@test.com")
-    userEvent.type(name, "test")
-    userEvent.click(button); */
-    /* await waitFor(() => {
-      expect(history.location.pathname).toBe("/game");
-    })  */
-
     screen.getByText(/loading/i)
 
     expect(history.location.pathname).toBe("/game");
     await wait()
     screen.debug()
 
-/*     await waitForElementToBeRemoved(() => {
-      
-    }) */
   });
 });
