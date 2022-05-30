@@ -5,7 +5,7 @@ const INITIAL_STATE = {
   inputLogin: {
     email: '',
     login: '',
-  }
+  },
 };
 
 function login(state = INITIAL_STATE, action) {
