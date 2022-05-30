@@ -34,7 +34,6 @@ class Game extends React.Component {
         questions: shuffle(questions2.results),
       });
     }
-
     this.startCounter();
   }
 
@@ -59,8 +58,7 @@ class Game extends React.Component {
   };
 
   stopCounter = () => {
-    this.setState({ timer: 0 },
-      () => clearInterval(this.interval));
+    this.setState({ timer: 0 }, () => clearInterval(this.interval));
   };
 
   resetCounter = () => {
@@ -102,15 +100,15 @@ class Game extends React.Component {
   };
 
   totalPoints = (answer) => {
-    if (answer === 'wrong-answer') return 0;
     const { avatar, getPlayer } = this.props;
     const { email, login } = avatar;
     const { timer, assertions, score, questions, indexQ } = this.state;
     const { difficulty } = questions[indexQ];
     const START_POINT = 10;
     const dificuldade = questionDifficult(difficulty);
-
     const pontuacao = START_POINT + timer * dificuldade;
+
+    if (answer === 'wrong-answer') return 0;
 
     this.setState((prevState) => ({
       score: prevState.score + pontuacao,
@@ -144,19 +142,21 @@ class Game extends React.Component {
       button.style.backgroundColor = '';
     });
 
-    if (indexQ === NUMBER_FOUR) {
-      const { history } = this.props;
-
-      history.push('/feedback');
-    }
-
     if (indexQ !== NUMBER_FOUR) {
       this.setState((prevState) => ({
         indexQ: prevState.indexQ + 1,
         timer: 30,
       }));
     }
+
+    if (indexQ === NUMBER_FOUR) {
+      this.setState({ score: 0 });
+      const { history } = this.props;
+
+      history.push('/feedback');
+    }
   };
+
 
   render() {
     const { questions, timer, score, respondido, indexQ } = this.state;
