@@ -1,3 +1,4 @@
+//https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Array/sort = funçao de sortPoints
 import React from 'react';
 import propTypes from 'prop-types';
 import { connect } from 'react-redux';

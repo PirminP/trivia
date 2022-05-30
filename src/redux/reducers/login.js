@@ -2,6 +2,10 @@ const INITIAL_STATE = {
   isFetching: false,
   data: '',
   error: '',
+  inputLogin: {
+    email: '',
+    login: '',
+  }
 };
 
 function login(state = INITIAL_STATE, action) {
