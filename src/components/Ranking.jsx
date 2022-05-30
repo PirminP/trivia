@@ -3,12 +3,22 @@ import propTypes from 'prop-types';
 import { connect } from 'react-redux';
 
 class Ranking extends React.Component {
+  constructor() {
+    super();
+
+    this.state = {
+      ranking: [],
+    };
+  }
+
   componentDidMount() {
     const { player } = this.props;
     const ranking = JSON.parse(localStorage.getItem('ranking'));
     ranking[ranking.length - 1].score = player.score;
+
     const players = this.sortPoints(ranking);
     localStorage.setItem('ranking', JSON.stringify(players));
+    this.setState({ ranking: players });
   }
 
   sortPoints = (players) => {
@@ -26,8 +36,10 @@ class Ranking extends React.Component {
   }
 
   render() {
-    const ranking = JSON.parse(localStorage.getItem('ranking'));
-    const players = this.sortPoints(ranking);
+    //const ranking = JSON.parse(localStorage.getItem('ranking'));
+    //const players = this.sortPoints(ranking);
+
+    const { ranking } = this.state;
 
     return (
 
@@ -35,7 +47,7 @@ class Ranking extends React.Component {
         <h1 data-testid="ranking-title">Ranking</h1>
 
         <div>
-          {players.map((player, index) => (
+          {ranking.map((player, index) => (
             <div key={ index }>
               <img src={ player.picture } alt="foto perfil" />
               <h3 data-testid={ `player-name-${index}` }>{player.name}</h3>
