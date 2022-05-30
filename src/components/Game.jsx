@@ -35,6 +35,8 @@ class Game extends React.Component {
       });
     }
 
+    console.log('player ', player);
+
     this.startCounter();
   }
 
@@ -227,7 +229,7 @@ class Game extends React.Component {
 const mapStateToProps = (state) => ({
   avatar: state.login.inputLogin,
   token: state.login.inputLogin.token,
-  player: state,
+  player: state.player,
 });
 
 const mapDispatchToProps = (dispatch) => ({
