@@ -2,12 +2,13 @@ import React from 'react';
 import { connect } from 'react-redux';
 import { Link } from 'react-router-dom';
 import propTypes from 'prop-types';
+import md5 from 'crypto-js/md5';
 import {
   fetchAction,
   actionLogin,
   fetchQuestion,
+  actionPlayer,
 } from '../redux/action/actions';
-import md5 from 'crypto-js/md5';
 
 class Login extends React.Component {
   constructor() {
@@ -44,7 +45,7 @@ class Login extends React.Component {
 
   saveTheToken = async () => {
     console.log(this.props);
-    const { history, getState } = this.props;
+    const { history, getState, getPlayer } = this.props;
     const { login, email } = this.state;
 
     const response = await fetch(
@@ -53,23 +54,24 @@ class Login extends React.Component {
     const token = await response.json();
 
     const myToken = token.token;
-    // const myLogin = login;
-    // const myEmail = email;
 
     getState({
       ...this.state,
       token: myToken,
     });
 
+    getPlayer({
+      name: login,
+      score: 0,
+      assertions: 0,
+      gravatarEmail: email,
+    });
+
+    // local storage
+
     localStorage.setItem('token', myToken);
 
     const hash = md5(email).toString();
-
-    // const playerData = {
-    //   name: login,
-    //   score: 0,
-    //   picture: `https://www.gravatar.com/avatar/${hash}`,
-    // };
 
     const playerData = { name: login, score: 0, picture: `https://www.gravatar.com/avatar/${hash}` };
 
@@ -79,10 +81,8 @@ class Login extends React.Component {
       const oldRanking = JSON.parse(localStorage.getItem('ranking'));
       oldRanking.push(playerData);
       localStorage.setItem('ranking', JSON.stringify(oldRanking));
-      // console.log('tem ranking');
       console.log(oldRanking);
     } else {
-      // console.log('não tem ranking');
       localStorage.setItem('ranking', JSON.stringify([playerData]));
     }
 
@@ -137,6 +137,7 @@ const mapDispatchToProps = (dispatch) => ({
   getToken: (state) => dispatch(fetchAction(state)),
   getState: (state) => dispatch(actionLogin(state)),
   getQuestion: (state) => dispatch(fetchQuestion(state)),
+  getPlayer: (state) => dispatch(actionPlayer(state)),
 });
 
 const mapStateToProps = (state) => ({
@@ -147,6 +148,7 @@ const mapStateToProps = (state) => ({
 Login.propTypes = {
   getState: propTypes.func.isRequired,
   history: propTypes.shape(propTypes.object).isRequired,
+  getPlayer: propTypes.func.isRequired,
 };
 
 export default connect(mapStateToProps, mapDispatchToProps)(Login);

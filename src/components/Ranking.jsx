@@ -36,9 +36,6 @@ class Ranking extends React.Component {
   };
 
   render() {
-    //const ranking = JSON.parse(localStorage.getItem('ranking'));
-    //const players = this.sortPoints(ranking);
-
     const { ranking } = this.state;
 
     return (
@@ -72,6 +69,7 @@ class Ranking extends React.Component {
 
 Ranking.propTypes = {
   history: propTypes.shape(propTypes.object).isRequired,
+  player: propTypes.shape({ score: propTypes.number.isRequired }).isRequired,
 };
 
 const mapStateToProps = (state) => ({
