@@ -157,7 +157,6 @@ class Game extends React.Component {
     }
   };
 
-
   render() {
     const { questions, timer, score, respondido, indexQ } = this.state;
     let allQuestins;

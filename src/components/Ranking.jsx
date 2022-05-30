@@ -1,6 +1,6 @@
-import React from "react";
-import propTypes from "prop-types";
-import { connect } from "react-redux";
+import React from 'react';
+import propTypes from 'prop-types';
+import { connect } from 'react-redux';
 
 class Ranking extends React.Component {
   constructor() {
@@ -13,12 +13,12 @@ class Ranking extends React.Component {
 
   componentDidMount() {
     const { player } = this.props;
-    const ranking = JSON.parse(localStorage.getItem("ranking"));
+    const ranking = JSON.parse(localStorage.getItem('ranking'));
     ranking[ranking.length - 1].score = player.score;
 
     const players = this.sortPoints(ranking);
-    localStorage.setItem("ranking", JSON.stringify(players));
-    this.setState({ ranking: players});
+    localStorage.setItem('ranking', JSON.stringify(players));
+    this.setState({ ranking: players });
   }
 
   sortPoints = (players) => {
@@ -40,25 +40,25 @@ class Ranking extends React.Component {
 
     return (
       <div>
-        <h1 data-testid='ranking-title'>Ranking</h1>
+        <h1 data-testid="ranking-title">Ranking</h1>
 
         <div>
           {ranking.map((player, index) => (
-            <div key={index}>
-              <img src={player.picture} alt='foto perfil' />
-              <h3 data-testid={`player-name-${index}`}>{player.name}</h3>
-              <h3 data-testid={`player-score-${index}`}>{player.score}</h3>
+            <div key={ index }>
+              <img src={ player.picture } alt="foto perfil" />
+              <h3 data-testid={ `player-name-${index}` }>{player.name}</h3>
+              <h3 data-testid={ `player-score-${index}` }>{player.score}</h3>
             </div>
           ))}
         </div>
 
         <button
-          type='button'
-          data-testid='btn-go-home'
-          onClick={() => {
+          type="button"
+          data-testid="btn-go-home"
+          onClick={ () => {
             const { history } = this.props;
-            history.push("/");
-          }}
+            history.push('/');
+          } }
         >
           Inicio
         </button>
