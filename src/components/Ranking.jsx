@@ -25,18 +25,14 @@ class Ranking extends React.Component {
 
     let ranking = JSON.parse(localStorage.getItem('ranking'));
 
-    console.log(ranking);
-
     if (ranking) {
       const oldRanking = ranking;
       oldRanking.push(playerData);
       const players = this.sortPoints(ranking);
       localStorage.setItem('ranking', JSON.stringify(players));
       this.setState({ ranking: players });
-      console.log('if', ranking);
     } else {
       ranking = [playerData];
-      console.log('else', ranking);
       localStorage.setItem('ranking', JSON.stringify(ranking));
       this.setState({ ranking });
     }
