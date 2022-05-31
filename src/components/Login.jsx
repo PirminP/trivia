@@ -2,7 +2,6 @@ import React from 'react';
 import { connect } from 'react-redux';
 import { Link } from 'react-router-dom';
 import propTypes from 'prop-types';
-import md5 from 'crypto-js/md5';
 import {
   fetchAction,
   actionLogin,
@@ -47,8 +46,6 @@ class Login extends React.Component {
     const { history, getState, getPlayer } = this.props;
     const { login, email } = this.state;
 
-    console.log(history);
-
     const response = await fetch(
       'https://opentdb.com/api_token.php?command=request',
     );
@@ -71,22 +68,6 @@ class Login extends React.Component {
     // local storage
 
     localStorage.setItem('token', myToken);
-
-    const hash = md5(email).toString();
-
-    const playerData = { name: login, score: 0, picture: `https://www.gravatar.com/avatar/${hash}` };
-
-    const ranking = JSON.parse(localStorage.getItem('ranking'));
-
-    if (ranking) {
-      const oldRanking = JSON.parse(localStorage.getItem('ranking'));
-      oldRanking.push(playerData);
-      localStorage.setItem('ranking', JSON.stringify(oldRanking));
-      console.log(oldRanking);
-    } else {
-      localStorage.setItem('ranking', JSON.stringify([playerData]));
-    }
-
     history.push('/game');
   };
 
@@ -135,9 +116,9 @@ class Login extends React.Component {
 }
 
 const mapDispatchToProps = (dispatch) => ({
-  getToken: (state) => dispatch(fetchAction(state)),
+  /* getToken: (state) => dispatch(fetchAction(state)), */
   getState: (state) => dispatch(actionLogin(state)),
-  getQuestion: (state) => dispatch(fetchQuestion(state)),
+  /* getQuestion: (state) => dispatch(fetchQuestion(state)), */
   getPlayer: (state) => dispatch(actionPlayer(state)),
 });
 

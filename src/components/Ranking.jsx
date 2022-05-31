@@ -1,5 +1,6 @@
 // https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Array/sort = funçao de sortPoints
 import React from 'react';
+import md5 from 'crypto-js/md5';
 import propTypes from 'prop-types';
 import { connect } from 'react-redux';
 
@@ -13,13 +14,32 @@ class Ranking extends React.Component {
   }
 
   componentDidMount() {
-    const { player } = this.props;
-    const ranking = JSON.parse(localStorage.getItem('ranking'));
-    ranking[ranking.length - 1].score = player.score;
+    const { player, email, login } = this.props;
+    const hash = md5(email).toString();
 
-    const players = this.sortPoints(ranking);
-    localStorage.setItem('ranking', JSON.stringify(players));
-    this.setState({ ranking: players });
+    const playerData = {
+      name: login,
+      score: player.score,
+      picture: `https://www.gravatar.com/avatar/${hash}`,
+    };
+
+    let ranking = JSON.parse(localStorage.getItem('ranking'));
+
+    console.log(ranking);
+
+    if (ranking) {
+      const oldRanking = ranking;
+      oldRanking.push(playerData);
+      const players = this.sortPoints(ranking);
+      localStorage.setItem('ranking', JSON.stringify(players));
+      this.setState({ ranking: players });
+      console.log('if', ranking);
+    } else {
+      ranking = [playerData];
+      console.log('else', ranking);
+      localStorage.setItem('ranking', JSON.stringify(ranking));
+      this.setState({ ranking });
+    }
   }
 
   sortPoints = (players) => {
@@ -71,6 +91,8 @@ class Ranking extends React.Component {
 Ranking.propTypes = {
   history: propTypes.shape(propTypes.object).isRequired,
   player: propTypes.shape({ score: propTypes.number.isRequired }).isRequired,
+  email: propTypes.string.isRequired,
+  login: propTypes.string.isRequired,
 };
 
 const mapStateToProps = (state) => ({
