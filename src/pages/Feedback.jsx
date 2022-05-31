@@ -5,28 +5,26 @@ import md5 from 'crypto-js/md5';
 import Header from '../components/Header';
 
 class Feedback extends React.Component {
-  constructor() {
-    super();
-    this.state = {
-      ranking: [],
-    };
-  }
-
   componentDidMount() {
     const { player, email, login } = this.props;
-    const { ranking } = this.state;
     const hash = md5(email).toString();
 
+    const history = JSON.parse(localStorage.getItem('ranking'));
     const playerData = {
       name: login,
       score: player.score,
       picture: `https://www.gravatar.com/avatar/${hash}`,
     };
-    ranking.push(playerData);
+    console.log(history);
 
-    localStorage.setItem('ranking', JSON.stringify(ranking));
-
-    console.log(player);
+    if (history === null) {
+      localStorage.setItem('ranking', JSON.stringify([playerData]));
+      console.log('if');
+    } else {
+      history.push(playerData);
+      localStorage.setItem('ranking', JSON.stringify(history));
+      console.log('else');
+    }
   }
 
   render() {
