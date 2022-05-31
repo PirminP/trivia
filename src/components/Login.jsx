@@ -3,9 +3,7 @@ import { connect } from 'react-redux';
 import { Link } from 'react-router-dom';
 import propTypes from 'prop-types';
 import {
-  fetchAction,
   actionLogin,
-  fetchQuestion,
   actionPlayer,
 } from '../redux/action/actions';
 
@@ -116,9 +114,7 @@ class Login extends React.Component {
 }
 
 const mapDispatchToProps = (dispatch) => ({
-  /* getToken: (state) => dispatch(fetchAction(state)), */
   getState: (state) => dispatch(actionLogin(state)),
-  /* getQuestion: (state) => dispatch(fetchQuestion(state)), */
   getPlayer: (state) => dispatch(actionPlayer(state)),
 });
 

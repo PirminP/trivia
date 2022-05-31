@@ -1,6 +1,5 @@
 // https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Array/sort = funçao de sortPoints
 import React from 'react';
-import md5 from 'crypto-js/md5';
 import propTypes from 'prop-types';
 import { connect } from 'react-redux';
 
@@ -14,25 +13,14 @@ class Ranking extends React.Component {
   }
 
   componentDidMount() {
-    const { player, email, login } = this.props;
-    const hash = md5(email).toString();
-
-    const playerData = {
-      name: login,
-      score: player.score,
-      picture: `https://www.gravatar.com/avatar/${hash}`,
-    };
-
     let ranking = JSON.parse(localStorage.getItem('ranking'));
 
     if (ranking) {
-      const oldRanking = ranking;
-      oldRanking.push(playerData);
       const players = this.sortPoints(ranking);
       localStorage.setItem('ranking', JSON.stringify(players));
       this.setState({ ranking: players });
     } else {
-      ranking = [playerData];
+      ranking = [];
       localStorage.setItem('ranking', JSON.stringify(ranking));
       this.setState({ ranking });
     }
@@ -55,18 +43,24 @@ class Ranking extends React.Component {
   render() {
     const { ranking } = this.state;
 
+    console.log(ranking);
+
     return (
       <div>
         <h1 data-testid="ranking-title">Ranking</h1>
 
         <div>
-          {ranking.map((player, index) => (
-            <div key={ index }>
-              <img src={ player.picture } alt="foto perfil" />
-              <h3 data-testid={ `player-name-${index}` }>{player.name}</h3>
-              <h3 data-testid={ `player-score-${index}` }>{player.score}</h3>
-            </div>
-          ))}
+          {ranking.length === 0 ? (
+            <>Volte ao inicio e começe uma partida para ter um ranking</>
+          ) : (
+            ranking.map((player, index) => (
+              <div key={ index }>
+                <img src={ player.picture } alt="foto perfil" />
+                <h3 data-testid={ `player-name-${index}` }>{player.name}</h3>
+                <h3 data-testid={ `player-score-${index}` }>{player.score}</h3>
+              </div>
+            ))
+          )}
         </div>
 
         <button
@@ -87,8 +81,7 @@ class Ranking extends React.Component {
 Ranking.propTypes = {
   history: propTypes.shape(propTypes.object).isRequired,
   player: propTypes.shape({ score: propTypes.number.isRequired }).isRequired,
-  email: propTypes.string.isRequired,
-  login: propTypes.string.isRequired,
+
 };
 
 const mapStateToProps = (state) => ({

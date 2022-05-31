@@ -41,4 +41,12 @@ describe("Realizando testes na tela de Ranking", () => {
     userEvent.click(start);
     expect(history.location.pathname).toBe("/");
   });
+
+  test("Testando se o ranking não existe", () => {
+    const { history } = renderWithRouterAndRedux(<App />);
+
+    localStorage.clear();
+
+    history.push("/ranking");
+  });
 });
