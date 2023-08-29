@@ -1,10 +1,19 @@
-# :construction: README em construção ! :construction:
-<!-- Olá, Tryber!
-Esse é apenas um arquivo inicial para o README do seu projeto.
-É essencial que você preencha esse documento por conta própria, ok?
-Não deixe de usar nossas dicas de escrita de README de projetos, e deixe sua criatividade brilhar!
-:warning: IMPORTANTE: você precisa deixar nítido:
-- quais arquivos/pastas foram desenvolvidos por você; 
-- quais arquivos/pastas foram desenvolvidos por outra pessoa estudante;
-- quais arquivos/pastas foram desenvolvidos pela Trybe.
--->
+# Project Front-End Online Store
+
+#### This website consists (group project)...
+
+* Designed by using React, BrowserRouter & CSS3
+* Applying agile methodologies like Kanban & Scrum
+
+### Instructions
+* To run and start the application locally, clone the project and use the following commands:
+
+  ```
+  npm install // install dependencies
+  npm start // start application
+  ```
+
+## Demonstration
+Access: [Click here]()
+
+![To access]()
