@@ -1,4 +1,4 @@
-# Project Front-End Online Store
+# Project Trivia
 
 #### This website consists (group project)...
 
