@@ -11,6 +11,7 @@
   ```
   npm install // install dependencies
   npm start // start application
+  npm test // test application
   ```
 
 ## Demonstration
