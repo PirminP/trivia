@@ -1,6 +1,6 @@
 # Project Trivia
 
-#### This website consists (group project)...
+#### This website contains a quiz game called 'Trivia' and was developed as group project.
 
 * Designed by using React, BrowserRouter & CSS3
 * Applying agile methodologies like Kanban & Scrum
